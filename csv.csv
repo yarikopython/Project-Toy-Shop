@@ -1,4 +1,4 @@
-name:gun toy
-price:20
-amount:90
-category:gun
+name,price,category,amount
+Gun,50,Guns,2
+Barbie,10,Toys,5
+Lego Set,15,Lego,10
