@@ -33,31 +33,41 @@ def create_toy(name: str, price: float, category: str, amount: int):
         return new_toy
 
 
+def get_toy(toy_id: int):
+    with session_local() as session:
+        toy = session.query(Toy).filter(Toy.id == toy_id).first()
+        return toy 
+    
+def delete_toy(toy_id: int):
+    with session_local() as session:
+        toy = get_toy(toy_id)
+        if not toy:
+            return None
+        
+        session.delete(toy)
+        session.commit()
+
+        return toy
+
+def update_toy(toy_id: int, name: str, price: float, category: str, amount: int):
+    with session_local() as session:
+        toy = get_toy(toy_id)
+        if not toy:
+            return None
+
+        toy.name = name
+        toy.price = price
+        toy.category = category
+        toy.amount = amount
+        session.add(toy)
+        session.commit()
+
+        return toy
+
+
 def csv_to_db(data):
     for row in data:
         new_toy = create_toy(name=row[0], price=row[1], category=row[2], amount=row[3])
     return new_toy
 
 Base.metadata.create_all(bind=engine)
-
-# data = []
-# with open("csv.csv", "r") as csvfile:
-#     reader = csvfile.read()
-    
-#     for x in reader:
-#         data.append(x)
-
-# con = sqlite3.connect("db.sqlite3")
-# cursor = con.cursor()
-# cursor.execute('''CREATE TABLE IF NOT EXISTS my_table (
-#                 category TEXT,
-#                 name TEXT,
-#                 amount BIGNINT,
-#                 price BIGINT
-#              )''')
-
-# cursor.execute("""INSERT INTO my_table VALUES (data)""")
-
-# con.commit()
-
-# con.close()
