@@ -21,7 +21,7 @@ class Toy(Base):
     category = Column(String)
     amount = Column(Integer, default=0)
 
-
+Base.metadata.create_all(bind=engine)
 
 toys = session_local().query(Toy).all()
 
@@ -36,10 +36,33 @@ def create_toy(name: str, price: float, category: str, amount: int):
             session.refresh(new_toy)
         return new_toy
 
-def delete_toy():
+def get_toy(toy_id: int):
     with session_local() as session:
-        pass
+        toy = session.query(Toy).filter(Toy.id == toy_id).first()
+        return toy 
 
+def delete_toy(name):
+    with session_local() as session:
+        toy_to_delete = session.query(Toy).filter(Toy.name == name).first()
+
+        if toy_to_delete:
+            session.delete(toy_to_delete)
+            session.commit()
+
+def update_toy(toy_id: int, name: str, price: float, category: str, amount: int):
+    with session_local() as session:
+        toy = get_toy(toy_id)
+        if not toy:
+            return None
+
+        toy.name = name
+        toy.price = price
+        toy.category = category
+        toy.amount = amount
+        session.add(toy)
+        session.commit()
+
+        return toy
 
 def csv_to_db(data):
     with open(data, "r") as read:
@@ -50,5 +73,5 @@ def csv_to_db(data):
             
 
 
-Base.metadata.create_all(bind=engine)
+
 csv_to_db("csv.csv")
