@@ -7,7 +7,7 @@ from database import delete_toy, create_toy, get_toy, update_toy
 while True:
     print("---------------------------")
     print("Welcome to Toy Shop")
-    print(colored("\t[1] Create new Toys", "blue"))
+    print(colored("\t [1] Create new Toys", "blue"))
     print(colored("\t [2] Delete Toys", "red"))
     print(colored("\t [3] Get information of Toys", "green"))
     print(colored("\t [4] Update Toy", "yellow"))
@@ -20,15 +20,15 @@ while True:
             input3 = input("Category: ")
             input4 = int(input("Amount: "))
             create_toy(input1, input2, input3, input4)
-            os.system("cls")
+            
         case 2:
             name = input("Name: ")
             delete_toy(name)
-            os.system("cls")
+            
         case 3:
             idik = int(input("Id of Toy: "))
             get_toy(idik)
-            os.system("cls")
+            
         case 4:
             name = input("Enter the name of the toy: ")
             price = float(input("Enter the price of the toy: "))
