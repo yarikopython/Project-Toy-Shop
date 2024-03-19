@@ -38,6 +38,7 @@ def create_toy(name: str, price: float, category: str, amount: int):
 
 def get_toy(toy_id: int):
     with session_local() as session:
+        
         toy = session.query(Toy).filter(Toy.id == toy_id).first()
         return toy 
 
@@ -48,7 +49,8 @@ def delete_toy(name):
         if toy_to_delete:
             session.delete(toy_to_delete)
             session.commit()
-
+        
+        return toy_to_delete
 def update_toy(toy_id: int, name: str, price: float, category: str, amount: int):
     with session_local() as session:
         toy = get_toy(toy_id)

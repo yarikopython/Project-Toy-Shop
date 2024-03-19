@@ -1,12 +1,27 @@
 from models import Toy
 import csv
-
-def spammreader(data):
-    with open(data, "r") as reader:
-        spammreader = csv.reader(reader)
-        next(spammreader)
-        for x in spammreader:
-            print(x)
+def csv_reader(
+        filepath: str, 
+        format: list = ['name', 'price', 'amount', 'category'], 
+        first_blank: bool = False
+) -> list[list[str]] | str:
+    try:
+        with open(filepath) as file:
+            csv_reader = csv.reader(file)
+            data = list(csv_reader)
             
+            if not first_blank:
+                first_blank = format != data[0] 
 
-spammreader("csv.csv")
+            if first_blank:
+                if len(data[0]) == len(format):
+                    return data
+            else:
+                if data[0] == format:
+                    return data[1:]
+    
+    except FileNotFoundError:
+        return f'File {filepath} not found' 
+    
+    return ''
+print(csv_reader("csv.csv"))
