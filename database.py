@@ -5,17 +5,18 @@ from sqlalchemy import Column, Integer, String, Float
 import sqlalchemy
 import sqlalchemy.orm
 import csv
+from csv_reader import write
 
 url = "sqlite:///./db.sqlite3"
 engine = create_engine(url)
-
+csv_toy = []
 
 session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = sqlalchemy.orm.declarative_base()
 
 class Toy(Base):
     __tablename__ = "toys"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     name =  Column(String)
     price = Column(Float(precision=2), default=0.0)
     category = Column(String)
@@ -34,13 +35,15 @@ def create_toy(name: str, price: float, category: str, amount: int):
             session.add(new_toy)
             session.commit()
             session.refresh(new_toy)
-        return new_toy
+            
+        print(new_toy)
 
 def get_toy(toy_id: int):
     with session_local() as session:
         
         toy = session.query(Toy).filter(Toy.id == toy_id).first()
-        return toy 
+        print(toy) 
+        return toy
 
 def delete_toy(name):
     with session_local() as session:
@@ -63,16 +66,16 @@ def update_toy(toy_id: int, name: str, price: float, category: str, amount: int)
         toy.amount = amount
         session.add(toy)
         session.commit()
+        csv_toy.append(toy)
 
         return toy
 
-def csv_to_db(data):
-    with open(data, "r") as read:
+def csv_to_db(file):
+    with open(file, "r") as read:
         
         reading = csv.reader(read)
         for row in reading:
-            new_toy = create_toy(name=row[0], price=row[1], category=row[2], amount=row[3])
-            
+            new_toy = create_toy(name=row[0], price=row[1],category=[2], amount=row[3])
 
 
 
