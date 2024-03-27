@@ -27,10 +27,8 @@ def menu():
                     input3 = str(input("Category: "))
                     input4 = int(input("Amount: "))
                     create_toy(input1, input2, input3, input4)
-                    data.append(input1)
-                    data.append(input2)
-                    data.append(input3)
-                    data.append(input4)
+                    for add in (input1, input2, input3, input4):
+                        data.append(add)
                     write("csv.csv", data)
                 except TypeError:
                     print("False Type")
@@ -40,7 +38,7 @@ def menu():
                 os.system('cls' if os.name == 'nt' else 'clear')
                 try:
                     name = input("Name: ")
-                    print(delete_toy(name))
+                    delete_toy(name)
                 except TypeError:
                     print("False Type")
                 finally:
@@ -59,13 +57,17 @@ def menu():
             case 4:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 try:
+                    inputs_list = []
                     print("List of Toys:")
                     csv_reader("csv.csv")
+                    id
                     name = input("Enter the name of the toy: ")
                     price = float(input("Enter the price of the toy: "))
                     category = input("Enter the category of the toy: ")
                     amount = int(input("Enter the amount of the toy: "))
-                    update_toy(name, price, category, amount)
+                    for inputs in (name, price, category, amount):
+                        inputs_list.append(inputs)
+                    update_toy(id, inputs)
                 except TypeError:
                     print("False Type")
                 finally:

@@ -1,6 +1,6 @@
 from models import Toy
 import csv
-def csv_reader(filepath: str):
+def reader(filepath: str):
     with open(filepath, "r") as read:
         reader = csv.reader(read)
         for x in reader:
