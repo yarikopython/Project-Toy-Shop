@@ -14,6 +14,8 @@ def reader(filepath: str):
         for x in reader:
             return x
 
+def load_data()
+
 def write(file : str, data: dict):
     with open(file, "w") as write:
         writer = csv.DictWriter(write,fieldnames=["name", "price", "category", "amount"])
