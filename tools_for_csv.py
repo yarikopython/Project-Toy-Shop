@@ -2,7 +2,7 @@ import csv
 filepath = "toys.csv"
 old_toy_name = "guntoy"
 data = {
-    "name":"dididon",
+    "name":"yarik",
     "price":2.0,
     "category":"gun",
     "amount":22
