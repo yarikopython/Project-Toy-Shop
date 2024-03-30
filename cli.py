@@ -1,6 +1,6 @@
 from termcolor import colored
 import os
-from csv_reader import write, csv_reader
+from tools_for_csv import write, reader, updater
 from database import delete_toy, create_toy, get_toy, update_toy, session_local, toys
 
 
@@ -46,7 +46,7 @@ def menu():
             case 3:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print("List of Toys:")
-                csv_reader("csv.csv")
+                reader("csv.csv")
                 try:
                     idik = int(input("Id of Toy: "))
                     get_toy(idik)
@@ -59,7 +59,7 @@ def menu():
                 try:
                     inputs_list = []
                     print("List of Toys:")
-                    csv_reader("csv.csv")
+                    reader("csv.csv")
                     id
                     name = input("Enter the name of the toy: ")
                     price = float(input("Enter the price of the toy: "))

@@ -1,4 +1,4 @@
-from csv_reader import write, reader, updater
+from tools_for_csv import write, reader, updater, filepath
 from models import Base, toys, session, csv_toy, Toy, engine
 
 Base.metadata.create_all(bind=engine)
@@ -26,15 +26,15 @@ def delete_toy(name):
             session.commit()
         
         return toy_to_delete
-def update_toy(toy_id, list_of_inputs):
+def update_toy(toy_id, name: str, price:float, category: str, amount: int):
         toy = get_toy(toy_id)
         if not toy:
             return None
 
-        toy.name = list_of_inputs[0]
-        toy.price = list_of_inputs[1]
-        toy.category = list_of_inputs[2]
-        toy.amount = list_of_inputs[3]
+        toy.name = name
+        toy.price = price
+        toy.category = category        
+        toy.amount = amount
         session.add(toy)
         session.commit()
         csv_toy.append(toy)
@@ -42,11 +42,11 @@ def update_toy(toy_id, list_of_inputs):
         return toy
 
 def format_for_csv(name: str, price: float, category: str, amount: str) -> list:
-    data_for_csv = []
-    for toys_list in (name, price, category, amount):
-        data_for_csv.append(toys_list)
-        write("csv.csv", data_for_csv)
-    return data_for_csv
+    data_for_csv = {"name": name,
+                    "price":price,
+                    "category":category,
+                    "amount":amount}
+    print(data_for_csv)
 
 def csv_to_db(file):
         reader(file)
@@ -55,4 +55,5 @@ def csv_to_db(file):
 
 
 
-csv_to_db("csv.csv")
+#csv_to_db("csv.csv")
+format_for_csv("butterfly knife", 91.1, "Kitchenware","5")

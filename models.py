@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker, declarative_base
-
 url = "sqlite:///./db.sqlite3"
 engine = create_engine(url)
 session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = session_local
 Base = declarative_base()
+
 csv_toy = []
 class Toy(Base):
     __tablename__ = "toys"
