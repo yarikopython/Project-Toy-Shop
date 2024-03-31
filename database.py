@@ -11,7 +11,6 @@ def create_toy(name: str, price: float, category: str, amount: int):
             session.commit()
             session.refresh(new_toy)
             
-        new_toy
 
 def get_toy(toy_id: int):
         toy = session.query(Toy).filter(Toy.id == toy_id).first()
@@ -26,6 +25,7 @@ def delete_toy(name):
             session.commit()
         
         return toy_to_delete
+
 def update_toy(toy_id, name: str, price:float, category: str, amount: int):
         toy = get_toy(toy_id)
         if not toy:
@@ -41,7 +41,7 @@ def update_toy(toy_id, name: str, price:float, category: str, amount: int):
 
         return toy
 
-def format_for_csv(name: str, price: float, category: str, amount: str) -> list:
+def format_for_csv(name: str, price: float, category: str, amount: str) -> dict:
     data_for_csv = {"name": name,
                     "price":price,
                     "category":category,
