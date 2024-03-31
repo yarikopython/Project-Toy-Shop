@@ -8,12 +8,16 @@ data = {
     "category":"gun",
     "amount":11
     }
+
+
 new_data = {
     "name":"guntoy",
     "price":13.0,
     "category":"amount",
     "amount":"category"
     }
+
+
 def reader(filepath: str):
     with open(filepath, "r") as read:
         reader = csv.DictReader(read)
