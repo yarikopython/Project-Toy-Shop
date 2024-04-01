@@ -16,4 +16,4 @@ class Toy(Base):
     amount = Column(Integer, default=0)
     
 
-toys = session_local().query(Toy).all()
+toys = session().query(Toy).all()

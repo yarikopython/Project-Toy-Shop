@@ -1,79 +1,47 @@
-from termcolor import colored
-import os
-from tools_for_csv import write, reader, updater
-from database import delete_toy, create_toy, get_toy, update_toy, session_local, toys
+from work_with_csv import write, reader, updater, filepath, data, new_data
+from database import delete_toy, create_toy, get_toy, update_toy, csv_to_db, format_for_csv
 
 
-def menu():
-    while True:
-        print("---------------------------")
-        print("Welcome to Toy Shop")
-        print(colored("\t [1] Create new Toys", "blue"))
-        print(colored("\t [2] Delete Toys", "red"))
-        print(colored("\t [3] Get information of Toys", "green"))
-        print(colored("\t [4] Update Toy", "yellow"))
-        print(colored("\t [5] Exit", "black"))
-        inputik = int(input("What you will choose?: "))
-        print("---------------------------")
-        match inputik:
-            case 1:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                data = []
-                try:
-                    print("List of Toys:")
-                    
-                    input1 = str(input("Name: "))
-                    input2 = float(input("Price: "))
-                    input3 = str(input("Category: "))
-                    input4 = int(input("Amount: "))
-                    create_toy(input1, input2, input3, input4)
-                    for add in (input1, input2, input3, input4):
-                        data.append(add)
-                    write("csv.csv", data)
-                except TypeError:
-                    print("False Type")
-                finally:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-            case 2:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                try:
-                    name = input("Name: ")
-                    delete_toy(name)
-                except TypeError:
-                    print("False Type")
-                finally:
-                   os.system('cls' if os.name == 'nt' else 'clear') 
-            case 3:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("List of Toys:")
-                reader("csv.csv")
-                try:
-                    idik = int(input("Id of Toy: "))
-                    get_toy(idik)
-                except TypeError:
-                    print("False Type")
-                finally:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-            case 4:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                try:
-                    inputs_list = []
-                    print("List of Toys:")
-                    reader("csv.csv")
-                    id
-                    name = input("Enter the name of the toy: ")
-                    price = float(input("Enter the price of the toy: "))
-                    category = input("Enter the category of the toy: ")
-                    amount = int(input("Enter the amount of the toy: "))
-                    for inputs in (name, price, category, amount):
-                        inputs_list.append(inputs)
-                    update_toy(id, inputs)
-                except TypeError:
-                    print("False Type")
-                finally:
-                    os.system('cls' if os.name == 'nt' else 'clear')   
-            case 5:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                break
-                os.system('cls' if os.name == 'nt' else 'clear')
-menu()
+def main():
+    new_toy_data = {"name":"nerf blasser",
+                    "price":19.5,
+                    "category":"blaser",
+                    "amount":90
+                    }
+    toy_to_delete = "nerf blaster"
+    toy_to_update_id = 28
+    toy_to_update = {
+        "name":"gun machine", 
+        "price":10.9, 
+        "category":"machinegun", 
+        "amount":90}
+    id_for_get_toy = 14
+    data_for_csv_format = {
+        "name":"pokemon",
+        "price":30.0,
+        "category":"pokemon",
+        "amount":50
+    }
+    
+    # functions for work with sqiite3 data base
+    
+    create_toy(name=new_toy_data["name"], price=new_toy_data["price"], category=new_toy_data["category"], amount=new_toy_data["amount"])
+    delete_toy(toy_to_delete)
+    update_toy(toy_id=toy_to_update_id, name=toy_to_update["name"],
+               price=toy_to_update["price"],
+               category=toy_to_update["category"],
+               amount=toy_to_update["amount"])
+    get_toy(toy_to_update_id)
+    format_for_csv(name=data_for_csv_format["name"],
+                   price=data_for_csv_format["price"],
+                   category=data_for_csv_format["category"],
+                   amount=data_for_csv_format["amount"])
+    
+    csv_to_db(filepath)
+    
+    #parameters for csv-work functions
+    
+    write(file=filepath, data=data)
+    reader(filepath=filepath)
+    updater(filepath=filepath, new_data=new_data)
+    
