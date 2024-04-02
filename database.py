@@ -1,73 +1,77 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float
+from work_with_csv import write, reader, updater
+from models import Base, session, Toy, engine
+
+Base.metadata.create_all(bind=engine)
 
 
-url = "sqlite:///./db.sqlite3"
-engine = create_engine(url)
-
-session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
-
-class Toy(Base):
-    __tablename__ = "toys"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    price = Column(Float(precision=2), default=0.0)
-    category = Column(String)
-    amount = Column(Integer, default=0)
-    
-        
 def create_toy(name: str, price: float, category: str, amount: int):
-    with session_local() as session:
+    toy_with_name = session.query(Toy).filter(Toy.name == name).first()
+    toys = session.query(Toy).all()
+    if not toy_with_name:
         new_toy = Toy(name=name, price=price, category=category, amount=amount)
-        toys = session_local().query(Toy).all()
         toys_name = [toy.name for toy in toys]
         if new_toy.name not in toys_name:
             session.add(new_toy)
             session.commit()
             session.refresh(new_toy)
-        return new_toy
+            return new_toy
+    else:
+        return "This toy already exists"
 
 
 def get_toy(toy_id: int):
-    with session_local() as session:
-        toy = session.query(Toy).filter(Toy.id == toy_id).first()
-        return toy 
-    
-def delete_toy(toy_id: int):
-    with session_local() as session:
-        toy = get_toy(toy_id)
-        if not toy:
-            return None
-        
-        session.delete(toy)
+    toy = session.query(Toy).filter(Toy.id == toy_id).first()
+    return toy
+
+
+def delete_toy(name: str):
+    toy_to_delete = session.query(Toy).filter(Toy.name == name).first()
+
+    if toy_to_delete:
+        session.delete(toy_to_delete)
         session.commit()
+        return toy_to_delete
+    else:
+        return "Toy with this name is doesnt exist"
 
-        return toy
 
-def update_toy(toy_id: int, name: str, price: float, category: str, amount: int):
-    with session_local() as session:
-        toy = get_toy(toy_id)
-        if not toy:
-            return None
-
+def update_toy(
+    toy_id: int, name: str, price: float, category: str, amount: int
+):
+    toy = get_toy(toy_id)
+    if toy:
         toy.name = name
         toy.price = price
         toy.category = category
         toy.amount = amount
         session.add(toy)
         session.commit()
-
         return toy
+    else:
+        return "Toy with this id doesnt exist"
 
 
-def csv_to_db(data):
-    for row in data:
-        new_toy = create_toy(name=row[0], price=row[1], category=row[2], amount=row[3])
-    return new_toy
+def format_for_csv(
+    name: str, price: float, category: str, amount: str
+) -> dict:
+    data_for_csv = {
+        "name": name,
+        "price": price,
+        "category": category,
+        "amount": amount,
+    }
+    return data_for_csv
 
-Base.metadata.create_all(bind=engine)
+
+def csv_to_db(filepath):
+    try:
+        read = reader(filepath)
+        for row in read:
+            create_toy(
+                name=row["name"],
+                price=row["price"],
+                category=["category"],
+                amount=row["amount"],
+            )
+    except TypeError as e:
+        print(f"Error: {e}")
