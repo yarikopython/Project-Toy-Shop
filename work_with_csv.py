@@ -46,4 +46,5 @@ def updater(filepath: str, new_data: dict):
     except IOError:
         print(f"Error while updating data in {filepath}")
     except FileNotFoundError:
-        print(f"File {filepath}, wasnt founded-")
+        print(f"File {filepath}, wasnt founded")
+        
