@@ -18,9 +18,8 @@ def reader(filepath: str):
             reader = csv.DictReader(read)
             for row in reader:
                 print(row)
-            return dict(reader)
-    except FileNotFoundError:
-        print(f"File {filepath} wasnt founded.")
+    except IOError:
+        print(f"Error while reading {filepath}")
 
 
 def write(filepath: str, data: dict):
@@ -37,5 +36,5 @@ def write(filepath: str, data: dict):
 def updater(filepath: str, new_data: dict):
     try:
         write(filepath, new_data)
-    except FileNotFoundError:
-        print(f"File {filepath}, wasnt founded-")
+    except IOError:
+        print(f"Error while updating data in {filepath}")

@@ -7,15 +7,19 @@ from database import (
     csv_to_db,
     format_for_csv,
 )
+from textual.app import App
+from textual.widgets import Label, Input, Button
+
+new_toy_data = {
+    "name": "nerf blasser",
+    "price": 19.5,
+    "category": "blaser",
+    "amount": 90,
+}
 
 
 def main():
-    new_toy_data = {
-        "name": "nerf blasser",
-        "price": 19.5,
-        "category": "blaser",
-        "amount": 90,
-    }
+
     toy_to_delete = "nerf blaster"
     toy_to_update_id = 1
     toy_to_update = {
@@ -63,3 +67,23 @@ def main():
     write(filepath=filepath, data=data)
     reader(filepath=filepath)
     updater(filepath=filepath, new_data=new_data)
+
+
+class ToyShop(App):
+    def comprose(self):
+        yield Label("ToyShop")
+        yield Label("Work with  DB:")
+        yield Button("Create toy")
+        yield Button("Delete Toy")
+        yield Button("Update Toy")
+        yield Button("Get Toy")
+        yield Label("Work with CSV")
+        yield Button("Formating data for csv")
+        yield Button("Write toy in csv")
+        yield Button("Read toy from csv")
+        yield Button("Update toy in csv")
+
+
+if __name__ == "__main__":
+    app = ToyShop()
+    app.run()
