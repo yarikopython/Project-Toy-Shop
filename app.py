@@ -13,17 +13,16 @@ print(tuple_data)
 class ToyShop(App):
     CSS_PATH = "cli.tcss"
     def compose(self):
-       yield Label("Data base of Toys:")
-       yield DataTable()
-       yield Label("Work with DB:")
-       yield Button("")
-       yield Button()
-       yield Button()
-       yield Button()
-       yield Button()
-       yield Button()
-       yield Button()
-       yield Button()
+        yield Label("Data base of Toys:")
+        yield DataTable()
+        yield Label("Work with DB:")
+        with Horizontal():  # Wrap buttons in a Horizontal container
+            yield Button("Add Toy", classes="add_button")
+            yield Button("Delete Toy", classes="delete_button")
+            yield Button("Update Toy", classes="update_button")
+            yield Button("Refresh", classes="refresh_button")
+            yield Button("Exit", classes="exit_button")
+
        
     
     def on_mount(self) -> None:

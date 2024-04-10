@@ -1,6 +1,7 @@
 Button { 
     margin: 1;
     height: 0.1;
+    layout: horizontal;
 }
 
 DataTable { 
