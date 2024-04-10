@@ -21,7 +21,7 @@ def reader(filepath: str):
         with open(filepath, "r") as read:
             reader = csv.DictReader(read)
             for row in reader:
-                print(row)      
+                return row
     except IOError:
         print(f"Error while reading {filepath}")
 
