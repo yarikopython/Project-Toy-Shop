@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+.vscode/
+*.sqlite3
+*.csv
+requirements.txt
