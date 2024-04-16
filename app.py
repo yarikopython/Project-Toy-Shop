@@ -11,16 +11,14 @@ from textual.widgets import (
 )
 from work_with_csv import reader, write, updater, filepath
 from database import create_toy, delete_toy, update_toy, get_toy
+from models import toys
+tuple_data = []
 
-read = reader(filepath)
-tuple_data = [(), (), (), ()]
-tuple_data[0] = read["name"]
-tuple_data[1] = read["price"]
-tuple_data[2] = read["category"]
-tuple_data[3] = read["amount"]
+for toy in toys:
+    tuple_data.append((toy.id,toy.name,toy.price,toy.category, toy.amount))
 
 update_input = True
-
+delete_input = True
 
 class ToyShop(App):
     CSS_PATH = "cli.tcss"
@@ -65,39 +63,62 @@ class ToyShop(App):
             placeholder="Amount", id="update_amount", disabled=update_input
         )
         update = Button("Update", id="update", disabled=update_input)
-        check = Button("Check", id="check")
+        check = Button("Check", id="update_check")
         return (id, name, price, category, amount, update, check)
 
 
-    def menu_delete_toy(self, event: Button.Pressed):
-        id = Input(placeholder="Id", id="id")
-        delete = Button("Delete", id="delete")
+    def menu_delete_toy(self):
+        name = Input(placeholder="name", id="delete_name")
+        delete = Button("Delete", id="delete", disabled=delete_input)
         check = Button("Check", id="check")
         
-        return (id, delete)
+        return (name, delete, check)
 
     def on_mount(self) -> None:
         table = self.query_one(DataTable)
-        table.add_columns("name", "price", "category", "amount")
-        table.add_rows([tuple_data])
+        table.add_columns("id", "name", "price", "category", "amount")
+        table.add_rows(tuple_data)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "create":
             inputs = self.query(Input)
-            for i in inputs:
-                if i.id == "create_name":
-                    name = i.value
-                elif i.id == "create_price":
-                    price = i.value
-                elif i.id == "create_category":
-                    category = i.value
-                elif i.id == "create_amount":
-                    amount = i.value
-
-            create_toy(name, price, category, amount)
-
-        if event.button.id == "check":
+            for create in inputs:
+                if create.id == "create_name":
+                    name = create.value
+                elif create.id == "create_price":
+                    price = create.value
+                elif create.id == "create_category":
+                    category = create.value
+                elif create.id == "create_amount":
+                    amount = create.value
+            create_toy(name,price,category,amount)
+        if event.button.id == "update":
             inputs = self.query(Input)
+            for update in inputs:
+                if update.id == "update_id":
+                    id = update.value
+                elif update.id == "update_name":
+                    name = update.value
+                elif update.id == "update_price":
+                    price = update.value
+                elif update.id == "update_category":
+                    category = update.value
+                elif update.id == "update_amount":
+                    amount = update.value
+                elif update.id == "update_check":
+                    check = update.value
+                    update_toy(id, name, price, category, amount)
+        if event.button.id == "delete":
+            inputs = self.query(Input)
+            for delete in inputs:
+                if delete.id == "delete_name":
+                    name = delete.value
+                    if event.button.id == 'delete_check': 
+                        for element in tuple_data:
+                            if element[1] == name:
+                                delete_input = False
+                                delete_toy(name)
+                
 
 
 if __name__ == "__main__":
