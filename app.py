@@ -108,6 +108,7 @@ class ToyShop(App):
                 elif update.id == "update_check":
                     check = update.value
                     update_toy(id, name, price, category, amount)
+        
         if event.button.id == "delete":
             inputs = self.query(Input)
             for delete in inputs:
