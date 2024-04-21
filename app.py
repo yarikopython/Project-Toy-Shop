@@ -49,30 +49,28 @@ class ToyShop(App):
         return (name, price, category, amount, create)
 
     def menu_update_toy(self):
-        id = Input(placeholder="Id", id="update_id", disabled=False)
+        id = Input(placeholder="Id", id="update_id")
         name = Input(
-            placeholder="Name", id="update_name", disabled=update_input
+            placeholder="Name", id="update_name"
         )
         price = Input(
-            placeholder="Price", id="update_price", disabled=update_input
+            placeholder="Price", id="update_price"
         )
         category = Input(
-            placeholder="Category", id="update_category", disabled=update_input
+            placeholder="Category", id="update_category"
         )
         amount = Input(
-            placeholder="Amount", id="update_amount", disabled=update_input
+            placeholder="Amount", id="update_amount"
         )
-        update = Button("Update", id="update", disabled=update_input)
-        check = Button("Check", id="update_check")
-        return (id, name, price, category, amount, update, check)
+        update = Button("Update", id="update")
+        return (id, name, price, category, amount, update)
 
 
     def menu_delete_toy(self):
         name = Input(placeholder="name", id="delete_name")
-        delete = Button("Delete", id="delete", disabled=delete_input)
-        check = Button("Check", id="check")
+        delete = Button("Delete", id="delete")
         
-        return (name, delete, check)
+        return (name, delete)
 
     def on_mount(self) -> None:
         table = self.query_one(DataTable)
@@ -105,20 +103,13 @@ class ToyShop(App):
                     category = update.value
                 elif update.id == "update_amount":
                     amount = update.value
-                elif update.id == "update_check":
-                    check = update.value
-                    update_toy(id, name, price, category, amount)
+            update_toy(id, name, price, category, amount)
         
         if event.button.id == "delete":
             inputs = self.query(Input)
             for delete in inputs:
-                if delete.id == "delete_name":
                     name = delete.value
-                    if event.button.id == 'delete_check': 
-                        for element in tuple_data:
-                            if element[1] == name:
-                                delete_input = False
-                                delete_toy(name)
+                    delete_toy(name)
                 
 
 
