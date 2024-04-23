@@ -1,12 +1,13 @@
 from work_with_csv import write, reader, updater, filepath, data, new_data
-from database import (
+from models import (
     delete_toy,
     create_toy,
     get_toy,
     update_toy,
-    csv_to_db,
-    format_for_csv,
+    csv_to_db
+
 )
+from database import format_for_csv
 
 
 def main():
