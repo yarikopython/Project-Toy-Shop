@@ -27,9 +27,10 @@ def create_toy(session, name: str, price: float, category: str, amount: int):
         session.add(new_toy)
         session.commit()
         session.refresh(new_toy)
+        
     else:
         print("this toy is already exist")
-
+    return name
 
 def get_toy(session, toy_id: int):
     toy = session.query(Toy).filter(Toy.id == toy_id).first()
@@ -50,7 +51,7 @@ def delete_toy(session, name):
 
 
 def update_toy(session, toy_id, name: str, price: float, category: str, amount: int):
-    toy = get_toy(toy_id)
+    toy = get_toy(session, toy_id)
     if toy:
         toy.name = name
         toy.price = price
