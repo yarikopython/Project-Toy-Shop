@@ -1,4 +1,4 @@
-from cli import main
+from mini_tests import main
 
 
 
