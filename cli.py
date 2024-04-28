@@ -4,7 +4,8 @@ from models import (
     create_toy,
     get_toy,
     update_toy,
-    csv_to_db
+    csv_to_db,
+    session
 
 )
 from database import format_for_csv
@@ -35,20 +36,22 @@ def main():
     # functions for work with sqiite3 data base
 
     create_toy(
+       session=session,
         name=new_toy_data["name"],
         price=new_toy_data["price"],
         category=new_toy_data["category"],
         amount=new_toy_data["amount"],
     )
-    delete_toy(toy_to_delete)
+    delete_toy(session=session, name=toy_to_delete)
     update_toy(
+        session=session,
         toy_id=toy_to_update_id,
         name=toy_to_update["name"],
         price=toy_to_update["price"],
         category=toy_to_update["category"],
         amount=toy_to_update["amount"],
     )
-    get_toy(toy_to_update_id)
+    get_toy(session, toy_to_update_id)
     format_for_csv(
         name=data_for_csv_format["name"],
         price=data_for_csv_format["price"],
@@ -56,10 +59,13 @@ def main():
         amount=data_for_csv_format["amount"],
     )
 
-    csv_to_db(filepath)
+    csv_to_db(session=session, filepath=filepath)
 
     # parameters for csv-work functions
 
     write(filepath=filepath, data=data)
     reader(filepath=filepath)
     updater(filepath=filepath, new_data=new_data)
+
+
+main()
