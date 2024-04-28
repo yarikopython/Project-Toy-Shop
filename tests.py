@@ -8,6 +8,7 @@ class TestModels(unittest.TestCase):
         engine = create_database(url="sqlite:///:memory:", base=Base)
         session = create_session(engine)
         return engine, session
+
     def test_create_toy(self):
         engine, session = self.create_db()
         data = ['toy1', 100, 'category1', 10]
@@ -32,30 +33,39 @@ class TestModels(unittest.TestCase):
 
     def test_get_toy_not_found(self):
         engine, session = self.create_db()
-        data = ['toy1', 100, "category", 10]
-        create_toy(session, data[0], data[1], data[2], data[3])
-        with self.assertRaises(IndexError):
-            get_toy(session, 2)
-    
+        toy = get_toy(session, 2)
+        self.assertIsNone(toy)
+
+
     def test_delete_toy(self):
         engine, session = self.create_db()
         data = ["toy", 200.0, "category1", 20]
-        toy = create_toy(session, data[0], data[1], data[2], data[3])
-        delete_toy(session, data[0])
+        create_toy(session, data[0], data[1], data[2], data[3])
+        delete_toy(session,data[0])
         self.assertIsNone(session.query(Toy).filter_by(name=data[0]).first())
-    
+
     def test_delete_toy_not_found(self):
         engine, session = self.create_db()
-        data = ['toy12', 100, "category", 10]
-        create_toy(session, data[0], data[1], data[2], data[3])
-        with self.assertRaises(IndexError):
-            delete_toy(session, data[0])
-    
+        self.assertIsNone(delete_toy(session, "non_existing_toy"))
+
     def test_update_toy(self):
         engine, session = self.create_db()
         data = ['toy12', 100, "category", 10]
         name = "toy13"
-        create_toy(session, *data)
+        create_toy(session, data[0], data[1], data[2], data[3])
         update_toy(session, 1, name, 1000, "category1", 100)
         toy = session.query(Toy).filter_by(name=name).first()
         self.assertEqual(toy.name, name)
+    
+    def test_update_toy_not_found(self):
+        engine, session = self.create_db()
+        data = ['toy12', 100, "category", 10]
+        name = "toy13"
+        create_toy(session, data[0], data[1], data[2], data[3])
+        self.assertIsNone(update_toy(session, 2000, data[0], data[1], data[2], data[3]))
+
+    def test_csv_to_db(self):
+        engine, session = self.create_db()
+    
+if __name__ == "__main__":
+    unittest.main()

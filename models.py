@@ -29,13 +29,13 @@ def create_toy(session, name: str, price: float, category: str, amount: int):
         session.refresh(new_toy)
         
     else:
-        print("this toy is already exist")
+        return None
     return name
 
 def get_toy(session, toy_id: int):
     toy = session.query(Toy).filter(Toy.id == toy_id).first()
     if not toy:
-        raise IndexError
+        return None
     return toy
 
 
