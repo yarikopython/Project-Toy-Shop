@@ -1,7 +1,7 @@
 import unittest
 from database import create_database, create_session
-from models import Base, create_toy, get_toy, Toy, delete_toy, update_toy
-
+from models import Base, create_toy, get_toy, Toy, delete_toy, update_toy, csv_to_db
+from work_with_csv import filepath, reader, write, updater, data, new_data
 
 class TestModels(unittest.TestCase):
     def create_db(self):
@@ -62,10 +62,17 @@ class TestModels(unittest.TestCase):
         data = ['toy12', 100, "category", 10]
         name = "toy13"
         create_toy(session, data[0], data[1], data[2], data[3])
-        self.assertIsNone(update_toy(session, 2000, data[0], data[1], data[2], data[3]))
+        self.assertIsNone(update_toy(session, 2, data[0], data[1], data[2], data[3]))
 
     def test_csv_to_db(self):
         engine, session = self.create_db()
-    
+        data = {
+            "name": "toy1",
+            "price": 100.0,
+            "category": "category1",
+            "amount": 10
+        }
+        toy = session.query(Toy).first()
+        self.assertEqual(toy, csv_to_db(session, filepath))
 if __name__ == "__main__":
     unittest.main()

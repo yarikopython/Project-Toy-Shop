@@ -23,7 +23,7 @@ def reader(filepath: str):
             for row in reader:
                 return row
     except IOError:
-        print(f"Error while reading {filepath}")
+        print(f"Error while reading {filepath} or {filepath} doesnt exists.")
 
 
 def write(filepath: str, data: dict):

@@ -67,10 +67,11 @@ def csv_to_db(session, filepath):
     try:
         read = reader(filepath)
         for row in read:
-            create_toy(session, name=row["name"],
+            toy = create_toy(session, name=row["name"],
                        price=row["price"],
                        category=row["category"],
                        amount=row["amount"])
+            return toy
     except TypeError as e:
         print(f"Error {e}")
 
