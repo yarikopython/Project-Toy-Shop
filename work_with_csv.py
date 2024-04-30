@@ -37,9 +37,10 @@ def write(filepath: str, data: dict):
     try:
         fieldnames = ["name", "price", "category", "amount"]
         with open(filepath, "w") as write:
-            writer = csv.DictWriter(write, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerow(data)
+            writer = csv.writer(write)
+            if data:
+                data = [value for value in data[0].values()]
+                writer.writerow(data)
     except IOError:
         print(f"Error while writing data in {filepath}")
 
