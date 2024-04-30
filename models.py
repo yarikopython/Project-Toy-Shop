@@ -63,6 +63,7 @@ def update_toy(session, toy_id, name: str, price: float, category: str, amount: 
     else:
         return None
 
+
 def csv_to_db(session, filepath):
     try:
         read = reader(filepath)

@@ -19,9 +19,16 @@ new_data = {
 def reader(filepath: str):
     try:
         with open(filepath, "r") as read:
-            reader = csv.DictReader(read)
+            result = []
+            result_row = {}
+            reader = csv.reader(read)
             for row in reader:
-                return row
+                result_row["name"] = row[0]
+                result_row["price"] = float(row[1])
+                result_row["category"] = row[2]
+                result_row["amount"] = float(row[3])
+                result.append(result_row)
+            return result
     except IOError:
         print(f"Error while reading {filepath} or {filepath} doesnt exists.")
 

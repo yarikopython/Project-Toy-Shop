@@ -36,7 +36,6 @@ class TestModels(unittest.TestCase):
         toy = get_toy(session, 2)
         self.assertIsNone(toy)
 
-
     def test_delete_toy(self):
         engine, session = self.create_db()
         data = ["toy", 200.0, "category1", 20]
@@ -46,7 +45,8 @@ class TestModels(unittest.TestCase):
 
     def test_delete_toy_not_found(self):
         engine, session = self.create_db()
-        self.assertIsNone(delete_toy(session, "non_existing_toy"))
+        delete_toy(session, "non_existing_toy")
+        self.assertRaises(IndexError, session.query(Toy).filter_by(name="non_existing_toy").first())
 
     def test_update_toy(self):
         engine, session = self.create_db()
@@ -60,7 +60,6 @@ class TestModels(unittest.TestCase):
     def test_update_toy_not_found(self):
         engine, session = self.create_db()
         data = ['toy12', 100, "category", 10]
-        name = "toy13"
         create_toy(session, data[0], data[1], data[2], data[3])
         self.assertIsNone(update_toy(session, 2, data[0], data[1], data[2], data[3]))
 
@@ -72,7 +71,7 @@ class TestModels(unittest.TestCase):
             "category": "category1",
             "amount": 10
         }
-        toy = session.query(Toy).first()
-        self.assertEqual(toy, csv_to_db(session, filepath))
-if __name__ == "__main__":
-    unittest.main()
+        method_data = csv_to_db(session, 'test.csv')
+        self.assertEqual(data['name'], method_data)
+
+
