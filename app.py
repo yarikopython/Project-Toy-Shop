@@ -10,8 +10,8 @@ from textual.widgets import (
     TabPane,
 )
 from work_with_csv import reader, write, updater, filepath
-from database import create_toy, delete_toy, update_toy, get_toy
-from models import toys
+from models import toys, create_toy, delete_toy, update_toy, get_toy
+
 tuple_data = []
 
 for toy in toys:
