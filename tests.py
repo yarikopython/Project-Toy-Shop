@@ -2,6 +2,7 @@ import unittest
 from database import create_database, create_session
 from models import Base, create_toy, get_toy, Toy, delete_toy, update_toy, csv_to_db
 from work_with_csv import filepath, reader, write, updater
+
 class TestModels(unittest.TestCase):
     def create_db(self):
         engine = create_database(url="sqlite:///:memory:", base=Base)
@@ -45,7 +46,8 @@ class TestModels(unittest.TestCase):
     def test_delete_toy_not_found(self):
         engine, session = self.create_db()
         delete_toy(session, "non_existing_toy")
-        self.assertRaises(IndexError, session.query(Toy).filter_by(name="non_existing_toy").first())
+        self.assertRaises(IndexError,
+                          session.query(Toy).filter_by(name="non_existing_toy").first())
 
     def test_update_toy(self):
         engine, session = self.create_db()
@@ -60,18 +62,21 @@ class TestModels(unittest.TestCase):
         engine, session = self.create_db()
         data = ['toy12', 100, "category", 10]
         create_toy(session, data[0], data[1], data[2], data[3])
-        self.assertIsNone(update_toy(session, 2, data[0], data[1], data[2], data[3]))
+        self.assertIsNone(update_toy(session, 2, data[0],
+                                     data[1],
+                                     data[2],
+                                     data[3]))
 
     def test_csv_to_db(self):
         engine, session = self.create_db()
         data = {
-            "name": "toy1",
+            "name": "spiderman",
             "price": 100.0,
             "category": "category1",
             "amount": 10
         }
-        method_data = csv_to_db(session, 'test.csv')
-        self.assertEqual(data['name'], method_data)
+        method_data = csv_to_db(session, 'tests_csv/test.csv')
+        self.assertEqual(data['name'], method_data["name"])
 
 class TestWork_With_Csv(unittest.TestCase):
     def test_read_csv(self):
@@ -90,18 +95,48 @@ class TestWork_With_Csv(unittest.TestCase):
         self.assertEqual(data, read)
     
     def test_write_csv(self):
+        assert_data = [{
+            "name":"spiderman",
+            "price":19.0,
+            "category":"superhero",
+            "amount":20
+        }]
+        data = {
+            "name": "spiderman",
+            "price": 19.0,
+            "catgory": "superhero",
+            "amount": 20
+        }
+        write("tests_csv/writer.csv", data)
+        self.assertEqual(reader("tests_csv/writer.csv"), assert_data)
+    
+    def test_write_csv_none_data(self):
+        data = []
+        write('tests_csv/none_data.csv', data)
+        read = reader("tests_csv/none_data.csv")
+        self.assertEqual(read, data)
+    
+    
+    def test_update_csv(self):
         data = [{
             "name":"spiderman",
             "price":19.0,
             "category":"superhero",
             "amount":20
         }]
-        writer = write('tests_csv/writer.csv', data)
-        read = reader("tests_csv/writer.csv")
-        self.assertEqual(read, data)
-    
-    def test_write_csv_none_data(self):
-        data = []
-        writer = write('tests_csv/none_data.csv', data)
-        read = reader("tests_csv/none_data.csv")
-        self.assertEqual(read,data)
+        new_data = {
+            "name": "nerf blaster",
+            "price": 90.0,
+            "category": "gun",
+            "amount": 1
+            }
+        new_data = {
+            "name": "nerf blaster",
+            "price": 90.0,
+            "category": "gun",
+            "amount": 1
+            }
+        write("tests_csv/updater.csv", data)
+        updater("tests_csv/updater.csv", new_data)
+        self.assertEqual(reader("tests_csv/updater.csv"), [new_data])
+        
