@@ -72,7 +72,7 @@ def csv_to_db(session, filepath):
                        price=row["price"],
                        category=row["category"],
                        amount=row["amount"])
-            return toy
+            return row
     except TypeError as e:
         print(f"Error {e}")
 

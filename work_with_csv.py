@@ -1,4 +1,5 @@
 import csv
+
 filepath = "csv.csv"
 data = {
     "name": "yarik",
@@ -7,46 +8,45 @@ data = {
     "amount": 11
     }
 
-
 new_data = {
     "name": "guntoy",
     "price": 13.0,
-    "category": "amount",
-    "amount": "category"
+    "category": "gun",
+    "amount": 12
     }
+file_not_found_dict = {}
 
 
 def reader(filepath: str):
-    try:
-        with open(filepath, "r") as read:
-            result = []
-            result_row = {}
-            reader = csv.reader(read)
-            for row in reader:
-                result_row["name"] = row[0]
-                result_row["price"] = float(row[1])
-                result_row["category"] = row[2]
-                result_row["amount"] = float(row[3])
-                result.append(result_row)
-            return result
-    except IOError:
-        print(f"Error while reading {filepath} or {filepath} doesnt exists.")
+    result = []
+    with open(filepath, "r") as read:
+        reader = csv.reader(read)
+        for row in reader:
+                if len(row):
+                    result_row = {}
+                    result_row["name"] = row[0]
+                    result_row["price"] = float(row[1])
+                    result_row["category"] = row[2]
+                    result_row["amount"] = float(row[3])
+                    result.append(result_row)   
+        return result
 
 
 def write(filepath: str, data: dict):
     try:
-        fieldnames = ["name", "price", "category", "amount"]
-        with open(filepath, "w") as write:
+        with open(filepath, "w", newline="") as write:
             writer = csv.writer(write)
             if data:
-                data = [value for value in data[0].values()]
+                data = [value for value in data.values()]
                 writer.writerow(data)
-    except IOError:
-        print(f"Error while writing data in {filepath}")
+                return data
+    except AttributeError as e:
+        print(f"Error: {e}")
 
 
-def updater(filepath: str, new_data: dict):
+def updater(filepath: str, new_data: dict) -> None:
     try:
-        write(filepath, new_data)
-    except IOError:
-        print(f"Error while updating data in {filepath}")
+        write(filepath, new_data)     
+        return new_data
+    except AttributeError as e:
+        print(f"Error: {e} you must to write dict not str")
