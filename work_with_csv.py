@@ -22,13 +22,13 @@ def reader(filepath: str):
     with open(filepath, "r") as read:
         reader = csv.reader(read)
         for row in reader:
-                if len(row):
-                    result_row = {}
-                    result_row["name"] = row[0]
-                    result_row["price"] = float(row[1])
-                    result_row["category"] = row[2]
-                    result_row["amount"] = float(row[3])
-                    result.append(result_row)   
+            if len(row):
+                result_row = {}
+                result_row["name"] = row[0]
+                result_row["price"] = float(row[1])
+                result_row["category"] = row[2]
+                result_row["amount"] = float(row[3])
+                result.append(result_row)
         return result
 
 
@@ -46,7 +46,7 @@ def write(filepath: str, data: dict):
 
 def updater(filepath: str, new_data: dict) -> None:
     try:
-        write(filepath, new_data)     
+        write(filepath, new_data)
         return new_data
     except AttributeError as e:
         print(f"Error: {e} you must to write dict not str")
