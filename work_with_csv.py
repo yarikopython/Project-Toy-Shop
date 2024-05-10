@@ -17,7 +17,18 @@ new_data = {
 file_not_found_dict = {}
 
 
-def reader(filepath: str):
+def reader(filepath: str) -> list:
+    """[summary]
+    Function reader read the *.csv file and return data as list of
+    dicts for every row. 
+    
+
+    Args:
+        filepath (str): filepath to *.csv file.
+
+    Returns:
+        list: return whole data as list. 
+    """
     result = []
     with open(filepath, "r") as read:
         reader = csv.reader(read)
@@ -32,7 +43,20 @@ def reader(filepath: str):
         return result
 
 
-def write(filepath: str, data: dict):
+def writer(filepath: str, data: dict) -> list:
+    """[summary]
+    Function writer write data in *.csv file.
+
+    Args:
+        filepath (str): filepath to *.csv file.
+        data (dict): data that will be write in *.csv file.
+
+    Returns:
+        list: return data as list of every row.
+    
+    Excepting:
+        AttributeError: if data is empty.
+    """
     try:
         with open(filepath, "w", newline="") as write:
             writer = csv.writer(write)
@@ -44,9 +68,22 @@ def write(filepath: str, data: dict):
         print(f"Error: {e}")
 
 
-def updater(filepath: str, new_data: dict) -> None:
+def updater(filepath: str, new_data: dict) -> dict:
+    """[summary]
+    Function updater update data in *.csv file.
+    
+    Args:
+        filepath (str): filepath to *.csv file.
+        new_data (dict): data that will be update old data in *.csv file.
+
+    Returns:
+        dict: return data.
+    
+    Excepting:
+        AttributeError: if data is empty.
+    """
     try:
-        write(filepath, new_data)
-        return new_data
+        writer(filepath, new_data)
+        
     except AttributeError as e:
-        print(f"Error: {e} you must to write dict not str")
+        print(f"Error: {e}")
